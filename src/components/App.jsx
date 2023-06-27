@@ -14,6 +14,23 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const contsctsJSON = localStorage.getItem('contacts');
+    const parsContacts = JSON.parse(contsctsJSON) ?? [];
+    if (parsContacts.length !== 0) {
+      this.setState({ contacts: parsContacts });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    const currentContacts = this.state.contacts;
+    const prevContacts = prevState.contacts;
+
+    if (currentContacts !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(currentContacts));
+    }
+  }
+
   addContact = ({ name, number }) => {
     const { contacts } = this.state;
     const existing = contacts.find(
